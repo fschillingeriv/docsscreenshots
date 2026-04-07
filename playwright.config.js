@@ -21,7 +21,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: process.env.WEB_APP_URL || 'https://vault.bitwarden.com',
-        viewport: { width: 1280, height: 800 },
+        viewport: { width: 1280, height: 1100 },
       },
     },
 
