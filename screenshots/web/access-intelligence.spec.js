@@ -13,10 +13,11 @@
  *   - Email verification disabled on the account
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
+import { login } from './helpers/login.js';
 
 dotenv.config();
 
@@ -25,8 +26,6 @@ const outputDir = resolve(__dirname, '../../output/web/adminconsole');
 
 const orgId = process.env.ORG_ID || '';
 const baseURL = process.env.WEB_APP_URL || 'https://vault.bitwarden.com';
-const email = process.env.BW_EMAIL || '';
-const password = process.env.BW_PASSWORD || '';
 
 // Shared screenshot helper — masks avatar, applies white mask color
 async function takeScreenshot(page, filename) {
@@ -47,23 +46,11 @@ async function waitForPageLoad(page) {
   await page.waitForTimeout(500);
 }
 
-// Log in and navigate to the Access Intelligence page before each test
 test.beforeEach(async ({ page }) => {
   if (!orgId) throw new Error('ORG_ID is not set in .env');
-  if (!email) throw new Error('BW_EMAIL is not set in .env');
-  if (!password) throw new Error('BW_PASSWORD is not set in .env');
 
-  // Log in
-  await page.goto(baseURL);
-  await page.waitForSelector('input[type="email"]', { state: 'visible' });
-  await page.fill('input[type="email"]', email);
-  await page.click('button:has-text("Continue")');
-  await page.waitForSelector('input[type="password"]', { state: 'visible' });
-  await page.fill('input[type="password"]', password);
-  await page.click('button:has-text("Log in with master password")');
-  await page.waitForSelector('nav', { state: 'visible', timeout: 30000 });
+  await login(page);
 
-  // Navigate to Access Intelligence
   await page.goto(`${baseURL}/#/organizations/${orgId}/access-intelligence`);
   await waitForPageLoad(page);
 });

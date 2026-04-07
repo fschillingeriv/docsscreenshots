@@ -14,6 +14,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
+import { login } from './helpers/login.js';
 
 dotenv.config();
 
@@ -22,23 +23,12 @@ const outputPath = resolve(__dirname, '../../output/web/adminconsole/policies.pn
 
 const orgId = process.env.ORG_ID || '';
 const baseURL = process.env.WEB_APP_URL || 'https://vault.bitwarden.com';
-const email = process.env.BW_EMAIL || '';
-const password = process.env.BW_PASSWORD || '';
 
 test('policies - full page screenshot', async ({ page }) => {
   if (!orgId) throw new Error('ORG_ID is not set in .env');
-  if (!email) throw new Error('BW_EMAIL is not set in .env');
-  if (!password) throw new Error('BW_PASSWORD is not set in .env');
 
   // Step 1: Log in
-  await page.goto(baseURL);
-  await page.waitForSelector('input[type="email"]', { state: 'visible' });
-  await page.fill('input[type="email"]', email);
-  await page.click('button:has-text("Continue")');
-  await page.waitForSelector('input[type="password"]', { state: 'visible' });
-  await page.fill('input[type="password"]', password);
-  await page.click('button:has-text("Log in with master password")');
-  await page.waitForSelector('nav', { state: 'visible', timeout: 30000 });
+  await login(page);
 
   // Step 2: Navigate to the Policies page
   await page.goto(`${baseURL}/#/organizations/${orgId}/settings/policies`);
