@@ -1,0 +1,11 @@
+# Environment variables
+.env
+
+# Saved auth session
+auth/storageState.json
+
+# Generated screenshots
+output/
+
+# Node
+node_modules/
