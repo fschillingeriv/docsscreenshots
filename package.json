@@ -1,0 +1,17 @@
+{
+  "name": "docs-screenshots",
+  "version": "1.0.0",
+  "description": "Automated screenshot pipeline for Bitwarden documentation",
+  "type": "module",
+  "scripts": {
+    "screenshot": "playwright test",
+    "screenshot:web": "playwright test --project=web",
+    "auth": "node auth/setup-auth.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
