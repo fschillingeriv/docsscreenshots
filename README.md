@@ -14,8 +14,9 @@ cp .env.example .env
 ## Usage
 
 ```bash
-npm run screenshot        # all projects
-npm run screenshot:web    # web only
+npm run screenshot                                    # all projects
+npm run screenshot:web                                # web only
+npx playwright test screenshots/web/policies.spec.js  # specific spec
 ```
 
 ## Authentication
@@ -46,12 +47,7 @@ Your org GUID can be found in the URL when navigating to your organization in th
 
 ## Specs
 
-| Spec | Output | Notes |
-|---|---|---|
-| `screenshots/web/access-intelligence.spec.js` | `web/adminconsole/access-intelligence-activity.png` | Requires `ORG_ID`. Masks account avatar. |
-| | `web/adminconsole/access-intelligence-all.png` | All applications tab. |
-| | `web/adminconsole/access-intelligence-critical.png` | Critical applications tab. |
-| `screenshots/web/policies.spec.js` | `web/adminconsole/policies.png` | Requires `ORG_ID`. Full page. |
+See [SPECS.md](./SPECS.md) for a full list of specs and their outputs.
 
 ## Structure
 
