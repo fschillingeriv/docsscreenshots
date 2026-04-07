@@ -46,6 +46,24 @@ All specs load this saved state at startup, so no credentials ever appear in cod
 
 The target URL is controlled by `WEB_APP_URL` in your `.env` file. If not set, it defaults to `https://vault.bitwarden.com`. To point at a different environment, update `.env` and re-run `npm run auth` to generate a fresh session for that environment.
 
+## Configuration
+
+All configuration lives in `.env`. Copy `.env.example` to get started:
+
+| Variable | Description | Default |
+|---|---|---|
+| `WEB_APP_URL` | Target web vault URL | `https://vault.bitwarden.com` |
+| `ORG_ID` | Your Bitwarden organization GUID | _(required for org-scoped specs)_ |
+
+Your org GUID can be found in the URL when navigating to your organization in the web vault:
+`https://vault.bitwarden.com/#/organizations/<ORG_ID>/...`
+
+## Specs
+
+| Spec | Page | Notes |
+|---|---|---|
+| `screenshots/web/access-intelligence.spec.js` | Access Intelligence | Requires `ORG_ID`. Masks account avatar. |
+
 ## Structure
 
 ```
