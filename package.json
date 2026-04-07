@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "screenshot": "playwright test",
-    "screenshot:web": "playwright test --project=web",
-    "auth": "node auth/setup-auth.js"
+    "screenshot:web": "playwright test --project=web"
   },
   "devDependencies": {
     "@playwright/test": "^1.43.0"

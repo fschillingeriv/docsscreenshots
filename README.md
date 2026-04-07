@@ -13,38 +13,22 @@ cp .env.example .env
 
 ## Usage
 
-**1. Generate auth state (run once, or when session expires):**
-```bash
-npm run auth
-```
-
-**2. Run screenshot specs:**
 ```bash
 npm run screenshot        # all projects
 npm run screenshot:web    # web only
 ```
 
-**3. Upload to Contentful:**
-```bash
-node scripts/upload.js
-```
-
 ## Authentication
 
-Specs run against an authenticated session saved locally to `auth/storageState.json`. This file is **gitignored** and will never be committed — it only ever exists on your local machine.
+Specs log in automatically using credentials from `.env`. Bitwarden's web vault keeps session tokens in memory rather than persisting them to `localStorage` or cookies, which means saved session state cannot be restored across browser contexts. For this reason, the full login flow runs at the start of every screenshot run — with email verification disabled on the account, this adds only a few seconds.
 
-To generate it, run `npm run auth`. This opens a real browser window and navigates to the target URL. Log in with your credentials, complete any 2FA, and fully unlock your vault — then return to the terminal and press Enter. The session is saved and the browser closes.
-
-All specs load this saved state at startup, so no credentials ever appear in code.
-
-**Re-run `npm run auth` when:**
-- Your session expires
-- You switch target environments via `WEB_APP_URL`
-- Someone else is setting up the project on their own machine (each person generates their own local session)
+**Requirements:**
+- Email verification must be disabled on the account used for screenshots
+- `BW_EMAIL` and `BW_PASSWORD` must be set in `.env`
 
 ## Environments
 
-The target URL is controlled by `WEB_APP_URL` in your `.env` file. If not set, it defaults to `https://vault.bitwarden.com`. To point at a different environment, update `.env` and re-run `npm run auth` to generate a fresh session for that environment.
+The target URL is controlled by `WEB_APP_URL` in `.env`. If not set, it defaults to `https://vault.bitwarden.com`.
 
 ## Configuration
 
@@ -54,6 +38,8 @@ All configuration lives in `.env`. Copy `.env.example` to get started:
 |---|---|---|
 | `WEB_APP_URL` | Target web vault URL | `https://vault.bitwarden.com` |
 | `ORG_ID` | Your Bitwarden organization GUID | _(required for org-scoped specs)_ |
+| `BW_EMAIL` | Login email for the screenshot account | _(required)_ |
+| `BW_PASSWORD` | Master password for the screenshot account | _(required)_ |
 
 Your org GUID can be found in the URL when navigating to your organization in the web vault:
 `https://vault.bitwarden.com/#/organizations/<ORG_ID>/...`
@@ -67,9 +53,9 @@ Your org GUID can be found in the URL when navigating to your organization in th
 ## Structure
 
 ```
-auth/           Auth setup script and saved session state (gitignored)
-screenshots/    Playwright specs, organized by client
-  web/          Web app specs
-scripts/        Upload and utility scripts
-output/         Generated screenshots (gitignored)
+auth/                 Reserved for future auth-related scripts
+screenshots/          Playwright specs, organized by client
+  web/                Web app specs
+scripts/              Upload and utility scripts (Contentful pipeline — Phase 2)
+output/               Generated screenshots (gitignored)
 ```
