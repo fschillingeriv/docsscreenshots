@@ -48,9 +48,10 @@ Your org GUID can be found in the URL when navigating to your organization in th
 
 | Spec | Output | Notes |
 |---|---|---|
-| `screenshots/web/access-intelligence.spec.js` | `access-intelligence-activity.png` | Requires `ORG_ID`. Masks account avatar. |
-| | `access-intelligence-all.png` | All applications tab. |
-| | `access-intelligence-critical.png` | Critical applications tab. |
+| `screenshots/web/access-intelligence.spec.js` | `web/adminconsole/access-intelligence-activity.png` | Requires `ORG_ID`. Masks account avatar. |
+| | `web/adminconsole/access-intelligence-all.png` | All applications tab. |
+| | `web/adminconsole/access-intelligence-critical.png` | Critical applications tab. |
+| `screenshots/web/policies.spec.js` | `web/adminconsole/policies.png` | Requires `ORG_ID`. Full page. |
 
 ## Structure
 
