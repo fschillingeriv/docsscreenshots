@@ -52,7 +52,6 @@ See [SPECS.md](./SPECS.md) for a full list of specs and their outputs.
 ## Structure
 
 ```
-auth/                 Reserved for future auth-related scripts
 screenshots/          Playwright specs, organized by client
   web/                Web app specs
 scripts/              Upload and utility scripts (Contentful pipeline — Phase 2)
