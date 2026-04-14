@@ -1,16 +1,15 @@
 /**
- * reporting-reports.spec.js
+ * reporting.spec.js
  *
- * Captures screenshots of all five standard report pages:
- *   - Exposed passwords (reporting-exposed-passwords.png)
- *   - Inactive two-factor (reporting-inactive-two-factor.png)
- *   - Reused passwords (reporting-reused-passwords.png)
- *   - Unsecured websites (reporting-unsecured-websites.png)
- *   - Weak passwords (reporting-weak-passwords.png)
- *
- * All five reports auto-load on navigation and show either a success callout
- * (no issues found) or a danger callout with results. We wait for whichever
- * callout appears as our signal that the page is fully rendered.
+ * Captures full-page screenshots of all Reporting pages:
+ *   - reporting-reports-home.png        — Reports home
+ *   - reporting-exposed-passwords.png   — Exposed passwords report
+ *   - reporting-inactive-two-factor.png — Inactive two-factor report
+ *   - reporting-reused-passwords.png    — Reused passwords report
+ *   - reporting-unsecured-websites.png  — Unsecured websites report
+ *   - reporting-weak-passwords.png      — Weak passwords report
+ *   - reporting-member-access.png       — Member access report
+ *   - reporting-events.png              — Event logs
  *
  * Requires:
  *   - BW_EMAIL and BW_PASSWORD set in .env
@@ -24,6 +23,7 @@ import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
 import { login } from './helpers/login.js';
+
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -42,43 +42,54 @@ async function takeScreenshot(page, filename) {
   console.log(`Screenshot saved: ${filename}`);
 }
 
-// All five reports render a bit-callout once loaded (success or danger)
 async function waitForReport(page) {
   await page.waitForSelector('.bwi-spinner', { state: 'detached', timeout: 15000 });
   await page.waitForSelector('bit-callout', { state: 'visible', timeout: 15000 });
 }
 
-test.beforeEach(async ({ page }) => {
+test('reporting pages', async ({ page }) => {
   if (!orgId) throw new Error('ORG_ID is not set in .env');
   await login(page);
-});
 
-test('reporting - exposed passwords report', async ({ page }) => {
+  // Reports home
+  await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports`);
+  await page.waitForSelector('app-report-list', { state: 'visible', timeout: 15000 });
+  await takeScreenshot(page, 'reporting-reports-home.png');
+
+  // Exposed passwords
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/exposed-passwords-report`);
   await waitForReport(page);
   await takeScreenshot(page, 'reporting-exposed-passwords.png');
-});
 
-test('reporting - inactive two-factor report', async ({ page }) => {
+  // Inactive two-factor
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/inactive-two-factor-report`);
   await waitForReport(page);
   await takeScreenshot(page, 'reporting-inactive-two-factor.png');
-});
 
-test('reporting - reused passwords report', async ({ page }) => {
+  // Reused passwords
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/reused-passwords-report`);
   await waitForReport(page);
   await takeScreenshot(page, 'reporting-reused-passwords.png');
-});
 
-test('reporting - unsecured websites report', async ({ page }) => {
+  // Unsecured websites
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/unsecured-websites-report`);
   await waitForReport(page);
   await takeScreenshot(page, 'reporting-unsecured-websites.png');
-});
 
-test('reporting - weak passwords report', async ({ page }) => {
+  // Weak passwords
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/weak-passwords-report`);
   await waitForReport(page);
   await takeScreenshot(page, 'reporting-weak-passwords.png');
+
+  // Member access
+  await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/member-access-report`);
+  await page.waitForSelector('bit-icon[name="bwi-spinner"]', { state: 'detached', timeout: 15000 });
+  await page.waitForSelector('bit-table-scroll', { state: 'visible', timeout: 15000 });
+  await takeScreenshot(page, 'reporting-member-access.png');
+
+  // Event logs
+  await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/events`);
+  await page.waitForSelector('input[type="datetime-local"]', { state: 'visible', timeout: 15000 });
+  await page.waitForSelector('[data-testid="events-table"], p', { state: 'visible', timeout: 15000 });
+  await takeScreenshot(page, 'reporting-events.png');
 });

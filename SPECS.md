@@ -29,32 +29,32 @@ All screenshots output to `output/` and are gitignored.
 
 | Spec | Output | Notes |
 |---|---|---|
-| `screenshots/web/adminconsole/access-intelligence.spec.js` | `access-intelligence-activity.png` | Requires `ORG_ID`. Masks account avatar. |
+| `screenshots/web/adminconsole/access-intelligence.spec.js` | `access-intelligence-activity.png` | Requires `ORG_ID`. |
 | | `access-intelligence-all.png` | All applications tab. |
 | | `access-intelligence-critical.png` | Critical applications tab. |
-| `screenshots/web/adminconsole/policies.spec.js` | `policies.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-vault.spec.js` | `org-vault.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/members.spec.js` | `members.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/groups.spec.js` | `groups.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-settings-account.spec.js` | `org-settings-account.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-settings-two-factor.spec.js` | `org-settings-two-factor.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-settings-import.spec.js` | `org-settings-import.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-settings-export.spec.js` | `org-settings-export.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-settings-domain-verification.spec.js` | `org-settings-domain-verification.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-settings-sso.spec.js` | `org-settings-sso.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/org-settings-scim.spec.js` | `org-settings-scim.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/adminconsole/org-vault-members-groups.spec.js` | `org-vault.png` | Requires `ORG_ID`. |
+| | `members.png` | |
+| | `groups.png` | |
 | `screenshots/web/adminconsole/integrations.spec.js` | `integrations-sso.png` | Requires `ORG_ID`. |
-| | `integrations-user-provisioning.png` | User provisioning tab. |
-| | `integrations-event-management.png` | Event management tab. |
-| | `integrations-device-management.png` | Device management tab. |
-| `screenshots/web/adminconsole/billing-subscription.spec.js` | `billing-subscription.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/billing-payment-details.spec.js` | `billing-payment-details.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/billing-history.spec.js` | `billing-history.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/reporting-reports-home.spec.js` | `reporting-reports-home.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/reporting-reports.spec.js` | `reporting-exposed-passwords.png` | Requires `ORG_ID`. |
+| | `integrations-user-provisioning.png` | |
+| | `integrations-event-management.png` | |
+| | `integrations-device-management.png` | |
+| `screenshots/web/adminconsole/org-settings.spec.js` | `org-settings-account.png` | Requires `ORG_ID`. |
+| | `org-settings-two-factor.png` | |
+| | `org-settings-import.png` | |
+| | `org-settings-export.png` | |
+| | `org-settings-domain-verification.png` | |
+| | `org-settings-sso.png` | |
+| | `org-settings-scim.png` | |
+| | `policies.png` | |
+| `screenshots/web/adminconsole/billing.spec.js` | `billing-subscription.png` | Requires `ORG_ID`. |
+| | `billing-payment-details.png` | |
+| | `billing-history.png` | |
+| `screenshots/web/adminconsole/reporting.spec.js` | `reporting-reports-home.png` | Requires `ORG_ID`. |
+| | `reporting-exposed-passwords.png` | |
 | | `reporting-inactive-two-factor.png` | |
 | | `reporting-reused-passwords.png` | |
 | | `reporting-unsecured-websites.png` | |
 | | `reporting-weak-passwords.png` | |
-| `screenshots/web/adminconsole/reporting-member-access.spec.js` | `reporting-member-access.png` | Requires `ORG_ID`. Full page. |
-| `screenshots/web/adminconsole/reporting-events.spec.js` | `reporting-events.png` | Requires `ORG_ID`. Full page. |
+| | `reporting-member-access.png` | |
+| | `reporting-events.png` | |

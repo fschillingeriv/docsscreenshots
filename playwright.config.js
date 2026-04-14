@@ -7,6 +7,7 @@ export default defineConfig({
   testDir: './screenshots',
   outputDir: './output',
   workers: 1, // Run specs sequentially to avoid concurrent login rate limiting
+  timeout: 60000, // 60s per test to accommodate rate limiting during login
 
   // Always write output to last-run.log in addition to the terminal
   reporter: [

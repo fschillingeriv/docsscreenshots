@@ -18,7 +18,7 @@ import { login } from '../adminconsole/helpers/login.js';
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outputPath = resolve(__dirname, '../../output/web/passwordmanager/tools-export.png');
+const outputPath = resolve(__dirname, '../../../output/web/passwordmanager/tools-export.png');
 
 const baseURL = process.env.WEB_APP_URL || 'https://vault.bitwarden.com';
 
