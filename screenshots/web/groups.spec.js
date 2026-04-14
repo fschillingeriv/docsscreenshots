@@ -1,7 +1,7 @@
 /**
- * policies.spec.js
+ * groups.spec.js
  *
- * Captures a full-page screenshot of the Policies settings page.
+ * Captures a full-page screenshot of the Groups page.
  *
  * Requires:
  *   - BW_EMAIL and BW_PASSWORD set in .env
@@ -15,28 +15,26 @@ import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
 import { login } from './helpers/login.js';
+
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outputPath = resolve(__dirname, '../../output/web/adminconsole/policies.png');
+const outputPath = resolve(__dirname, '../../output/web/adminconsole/groups.png');
 
 const orgId = process.env.ORG_ID || '';
 const baseURL = process.env.WEB_APP_URL || 'https://vault.bitwarden.com';
 
-test('policies - full page screenshot', async ({ page }) => {
+test('groups - full page screenshot', async ({ page }) => {
   if (!orgId) throw new Error('ORG_ID is not set in .env');
 
-  // Step 1: Log in
   await login(page);
 
-  // Step 2: Navigate to the Policies page
-  await page.goto(`${baseURL}/#/organizations/${orgId}/settings/policies`);
+  await page.goto(`${baseURL}/#/organizations/${orgId}/groups`);
 
-  // Step 2: Wait for the loading spinner to detach and policy sections to render
+  // Wait for spinner to detach then either the table or the empty state message
   await page.waitForSelector('.bwi-spinner', { state: 'detached', timeout: 15000 });
-  await page.waitForSelector('bit-section', { state: 'visible', timeout: 10000 });
+  await page.waitForSelector('bit-table, p', { state: 'visible', timeout: 10000 });
 
-  // Step 3: Take a full-page screenshot, masking the account avatar
   await page.screenshot({
     path: outputPath,
     fullPage: true,

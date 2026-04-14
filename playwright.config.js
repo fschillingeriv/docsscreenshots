@@ -6,10 +6,13 @@ dotenv.config();
 export default defineConfig({
   testDir: './screenshots',
   outputDir: './output',
+  workers: 1, // Run specs sequentially to avoid concurrent login rate limiting
 
   use: {
     // Screenshots are taken manually in each spec via page.screenshot()
     screenshot: 'off',
+    // Ignore HTTPS errors for local development environments with self-signed certificates
+    ignoreHTTPSErrors: true,
     // Wait for network to settle before specs start
     waitUntil: 'networkidle',
   },

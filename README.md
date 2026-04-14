@@ -14,18 +14,25 @@ cp .env.example .env
 ## Usage
 
 ```bash
-npm run screenshot                                    # all projects
-npm run screenshot:web                                # web only
+npm run screenshot        # all projects
+npm run screenshot:web    # web only
 npx playwright test screenshots/web/policies.spec.js  # specific spec
 ```
 
+Before the suite runs, Playwright automatically logs in once via `global-setup.js` and saves the session to `auth/storageState.json`. All specs reuse that session — no per-spec login.
+
 ## Authentication
 
-Specs log in automatically using credentials from `.env`. Bitwarden's web vault keeps session tokens in memory rather than persisting them to `localStorage` or cookies, which means saved session state cannot be restored across browser contexts. For this reason, the full login flow runs at the start of every screenshot run — with email verification disabled on the account, this adds only a few seconds.
+Login is handled once per suite run by `global-setup.js`. It logs in headlessly, saves the session to `auth/storageState.json`, and all specs load that state automatically.
 
 **Requirements:**
-- Email verification must be disabled on the account used for screenshots
+- Email verification must be disabled on the account
+- Vault timeout must be set to **Never** (so the token is persisted to `localStorage`)
 - `BW_EMAIL` and `BW_PASSWORD` must be set in `.env`
+
+**If the session expires or `storageState.json` is missing**, just re-run `npm run screenshot:web` — global setup runs automatically at the start of every suite run.
+
+**Reverting to per-spec login:** If the global setup approach stops working, restore `playwright.config.backup.js` → `playwright.config.js` and `screenshots/web/helpers/login.backup.js` → `screenshots/web/helpers/login.js`, then re-add `await login(page)` calls to each spec.
 
 ## Environments
 
@@ -54,6 +61,9 @@ See [SPECS.md](./SPECS.md) for a full list of specs and their outputs.
 ```
 screenshots/          Playwright specs, organized by client
   web/                Web app specs
+    helpers/          Shared helpers (login.js)
 scripts/              Upload and utility scripts (Contentful pipeline — Phase 2)
 output/               Generated screenshots (gitignored)
+global-setup.js       Runs once before the suite — logs in and saves session
+playwright.config.js  Playwright configuration
 ```

@@ -10,3 +10,28 @@ All screenshots output to `output/` and are gitignored.
 | | `access-intelligence-all.png` | All applications tab. |
 | | `access-intelligence-critical.png` | Critical applications tab. |
 | `screenshots/web/policies.spec.js` | `policies.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-vault.spec.js` | `org-vault.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/members.spec.js` | `members.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/groups.spec.js` | `groups.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-settings-account.spec.js` | `org-settings-account.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-settings-two-factor.spec.js` | `org-settings-two-factor.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-settings-import.spec.js` | `org-settings-import.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-settings-export.spec.js` | `org-settings-export.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-settings-domain-verification.spec.js` | `org-settings-domain-verification.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-settings-sso.spec.js` | `org-settings-sso.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/org-settings-scim.spec.js` | `org-settings-scim.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/integrations.spec.js` | `integrations-sso.png` | Requires `ORG_ID`. |
+| | `integrations-user-provisioning.png` | User provisioning tab. |
+| | `integrations-event-management.png` | Event management tab. |
+| | `integrations-device-management.png` | Device management tab. |
+| `screenshots/web/billing-subscription.spec.js` | `billing-subscription.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/billing-payment-details.spec.js` | `billing-payment-details.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/billing-history.spec.js` | `billing-history.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/reporting-reports-home.spec.js` | `reporting-reports-home.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/reporting-reports.spec.js` | `reporting-exposed-passwords.png` | Requires `ORG_ID`. |
+| | `reporting-inactive-two-factor.png` | |
+| | `reporting-reused-passwords.png` | |
+| | `reporting-unsecured-websites.png` | |
+| | `reporting-weak-passwords.png` | |
+| `screenshots/web/reporting-member-access.spec.js` | `reporting-member-access.png` | Requires `ORG_ID`. Full page. |
+| `screenshots/web/reporting-events.spec.js` | `reporting-events.png` | Requires `ORG_ID`. Full page. |

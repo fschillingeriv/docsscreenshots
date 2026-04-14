@@ -47,5 +47,20 @@ export async function login(page) {
   await page.waitForSelector('input[type="password"]', { state: 'visible' });
   await page.fill('input[type="password"]', password);
   await page.click('button:has-text("Log in with master password")');
+
+  // After login, either the vault nav or the browser extension prompt appears.
+  // Wait for whichever comes first and dismiss the prompt if needed.
+  await page.waitForSelector('nav, button:has-text("Add it later")', {
+    state: 'visible',
+    timeout: 30000,
+  });
+  const addLaterButton = page.locator('button:has-text("Add it later")');
+  if (await addLaterButton.isVisible()) {
+    await addLaterButton.click();
+    // A confirmation dialog appears — click "Skip to web app" to proceed
+    await page.waitForSelector('a:has-text("Skip to web app")', { state: 'visible', timeout: 10000 });
+    await page.click('a:has-text("Skip to web app")');
+  }
+
   await page.waitForSelector('nav', { state: 'visible', timeout: 30000 });
 }
