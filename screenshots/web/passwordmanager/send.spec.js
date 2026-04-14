@@ -16,7 +16,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from '../web/helpers/login.js';
+import { login } from '../adminconsole/helpers/login.js';
 
 dotenv.config();
 

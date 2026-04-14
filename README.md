@@ -15,9 +15,10 @@ cp .env.example .env
 
 ```bash
 npm run screenshot                                                 # all projects
-npm run screenshot:web                                             # admin console only
-npm run screenshot:passwordmanager                                 # password manager only
-npx playwright test screenshots/web/policies.spec.js               # specific spec
+npm run screenshot:web                                             # all web projects
+npm run screenshot:web:adminconsole                                # admin console only
+npm run screenshot:web:passwordmanager                             # password manager only
+npx playwright test screenshots/web/adminconsole/policies.spec.js  # specific spec
 ```
 
 Output is written to the terminal and automatically saved to `last-run.log` for inspection.
@@ -79,11 +80,15 @@ See [SPECS.md](./SPECS.md) for a full list of specs and their outputs.
 ## Structure
 
 ```
-screenshots/              Playwright specs, organized by area
-  web/                    Admin Console specs
-    helpers/              Shared helpers (login.js)
-  passwordmanager/        Password Manager specs
+screenshots/              Playwright specs, organized by client then product area
+  web/                    Web client
+    adminconsole/         Admin Console specs
+      helpers/            Shared helpers (login.js)
+    passwordmanager/      Password Manager specs
 scripts/                  Upload and utility scripts (Contentful pipeline — Phase 2)
 output/                   Generated screenshots (gitignored)
+  web/
+    adminconsole/
+    passwordmanager/
 last-run.log              Output from the most recent run (gitignored)
 ```

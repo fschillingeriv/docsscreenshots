@@ -24,8 +24,8 @@ export default defineConfig({
 
   projects: [
     {
-      name: 'web',
-      testDir: './screenshots/web',
+      name: 'web-adminconsole',
+      testDir: './screenshots/web/adminconsole',
       use: {
         ...devices['Desktop Chrome'],
         baseURL: process.env.WEB_APP_URL || 'https://vault.bitwarden.com',
@@ -33,8 +33,8 @@ export default defineConfig({
       },
     },
     {
-      name: 'passwordmanager',
-      testDir: './screenshots/passwordmanager',
+      name: 'web-passwordmanager',
+      testDir: './screenshots/web/passwordmanager',
       use: {
         ...devices['Desktop Chrome'],
         baseURL: process.env.WEB_APP_URL || 'https://vault.bitwarden.com',

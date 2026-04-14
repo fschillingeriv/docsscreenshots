@@ -1,7 +1,7 @@
 /**
- * tools-import.spec.js
+ * tools-export.spec.js
  *
- * Captures a full-page screenshot of the Tools > Import page.
+ * Captures a full-page screenshot of the Tools > Export page.
  *
  * Requires:
  *   - BW_EMAIL and BW_PASSWORD set in .env
@@ -13,21 +13,21 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from '../web/helpers/login.js';
+import { login } from '../adminconsole/helpers/login.js';
 
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outputPath = resolve(__dirname, '../../output/web/passwordmanager/tools-import.png');
+const outputPath = resolve(__dirname, '../../output/web/passwordmanager/tools-export.png');
 
 const baseURL = process.env.WEB_APP_URL || 'https://vault.bitwarden.com';
 
-test('tools import - full page screenshot', async ({ page }) => {
+test('tools export - full page screenshot', async ({ page }) => {
   await login(page);
-  await page.goto(`${baseURL}/#/tools/import`);
+  await page.goto(`${baseURL}/#/tools/export`);
 
-  // Wait for the import component to render
-  await page.waitForSelector('tools-import', { state: 'visible', timeout: 15000 });
+  // Wait for the export component to render
+  await page.waitForSelector('tools-export', { state: 'visible', timeout: 15000 });
 
   await page.screenshot({
     path: outputPath,
