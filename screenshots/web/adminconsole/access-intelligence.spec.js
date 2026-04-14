@@ -22,7 +22,7 @@ import { login } from './helpers/login.js';
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outputDir = resolve(__dirname, '../../output/web/adminconsole');
+const outputDir = resolve(__dirname, '../../../output/web/adminconsole');
 
 const orgId = process.env.ORG_ID || '';
 const baseURL = process.env.WEB_APP_URL || 'https://vault.bitwarden.com';
