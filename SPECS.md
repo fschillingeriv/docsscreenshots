@@ -2,6 +2,29 @@
 
 All screenshots output to `output/` and are gitignored.
 
+## Web — Password Manager (`output/web/passwordmanager/`)
+
+| Spec | Output | Notes |
+|---|---|---|
+| `screenshots/passwordmanager/vault.spec.js` | `vault.png` | Base vault page. |
+| | `vault-new-login.png` | New Login dialog. |
+| | `vault-new-card.png` | New Card dialog. |
+| | `vault-new-identity.png` | New Identity dialog. |
+| | `vault-new-note.png` | New Note dialog. |
+| | `vault-new-ssh-key.png` | New SSH key dialog. |
+| | `vault-new-folder.png` | New Folder dialog. |
+| | `vault-new-collection.png` | New Collection dialog. |
+| | `vault-item-options-login.png` | Login item options menu. |
+| | `vault-bulk-options.png` | Bulk actions menu (2 items selected). |
+| `screenshots/passwordmanager/send.spec.js` | `send.png` | Base Send page. |
+| | `send-new-text.png` | New Text Send dialog. |
+| | `send-new-file.png` | New File Send dialog. |
+| `screenshots/passwordmanager/tools-generator.spec.js` | `tools-generator-password.png` | Password view (default). |
+| | `tools-generator-passphrase.png` | Passphrase view. |
+| | `tools-generator-username.png` | Username view. |
+| `screenshots/passwordmanager/tools-import.spec.js` | `tools-import.png` | |
+| `screenshots/passwordmanager/tools-export.spec.js` | `tools-export.png` | |
+
 ## Web — Admin Console (`output/web/adminconsole/`)
 
 | Spec | Output | Notes |

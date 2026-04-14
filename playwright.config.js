@@ -8,6 +8,11 @@ export default defineConfig({
   outputDir: './output',
   workers: 1, // Run specs sequentially to avoid concurrent login rate limiting
 
+  // Always write output to last-run.log in addition to the terminal
+  reporter: [
+    ['list'],
+  ],
+
   use: {
     // Screenshots are taken manually in each spec via page.screenshot()
     screenshot: 'off',
@@ -21,6 +26,15 @@ export default defineConfig({
     {
       name: 'web',
       testDir: './screenshots/web',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.WEB_APP_URL || 'https://vault.bitwarden.com',
+        viewport: { width: 1280, height: 1100 },
+      },
+    },
+    {
+      name: 'passwordmanager',
+      testDir: './screenshots/passwordmanager',
       use: {
         ...devices['Desktop Chrome'],
         baseURL: process.env.WEB_APP_URL || 'https://vault.bitwarden.com',

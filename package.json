@@ -4,8 +4,9 @@
   "description": "Automated screenshot pipeline for Bitwarden documentation",
   "type": "module",
   "scripts": {
-    "screenshot": "playwright test",
-    "screenshot:web": "playwright test --project=web"
+    "screenshot": "playwright test 2>&1 | tee last-run.log",
+    "screenshot:web": "playwright test --project=web 2>&1 | tee last-run.log",
+    "screenshot:passwordmanager": "playwright test --project=passwordmanager 2>&1 | tee last-run.log"
   },
   "devDependencies": {
     "@playwright/test": "^1.43.0"

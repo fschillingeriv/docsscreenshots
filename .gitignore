@@ -6,3 +6,6 @@ output/
 
 # Node
 node_modules/
+
+# Test output log
+last-run.log
