@@ -18,6 +18,7 @@ npm run screenshot                                                 # all project
 npm run screenshot:web                                             # all web projects
 npm run screenshot:web:adminconsole                                # admin console only
 npm run screenshot:web:passwordmanager                             # password manager only
+npm run screenshot:web:secretsmanager                              # secrets manager only
 npx playwright test screenshots/web/adminconsole/policies.spec.js  # specific spec
 ```
 
@@ -59,12 +60,16 @@ All configuration lives in `.env`. Copy `.env.example` to get started:
 | Variable | Description | Default |
 |---|---|---|
 | `WEB_APP_URL` | Target web vault URL | `https://vault.bitwarden.com` |
-| `ORG_ID` | Your Bitwarden organization GUID | _(required for org-scoped specs)_ |
+| `ORG_ID` | Organization GUID for Admin Console specs | _(required for org-scoped specs)_ |
+| `SM_ORG_ID` | Organization GUID for Secrets Manager specs | _(required for SM specs)_ |
 | `BW_EMAIL` | Login email for the screenshot account | _(required)_ |
 | `BW_PASSWORD` | Master password for the screenshot account | _(required)_ |
 
-Your org GUID can be found in the URL when navigating to your organization in the web vault:
-`https://vault.bitwarden.com/#/organizations/<ORG_ID>/...`
+Your org GUIDs can be found in the URL when navigating to the relevant product:
+- Admin Console: `https://vault.bitwarden.com/#/organizations/<ORG_ID>/...`
+- Secrets Manager: `https://vault.bitwarden.com/#/sm/<SM_ORG_ID>/...`
+
+In most cases these will be the same GUID.
 
 ## Known limitations
 
@@ -85,10 +90,15 @@ screenshots/              Playwright specs, organized by client then product are
     adminconsole/         Admin Console specs
       helpers/            Shared helpers (login.js)
     passwordmanager/      Password Manager specs
+    secretsmanager/       Secrets Manager specs
 scripts/                  Upload and utility scripts (Contentful pipeline — Phase 2)
 output/                   Generated screenshots (gitignored)
   web/
     adminconsole/
     passwordmanager/
+    secretsmanager/
 last-run.log              Output from the most recent run (gitignored)
 ```
+
+
+---
