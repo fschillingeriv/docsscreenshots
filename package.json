@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "screenshot": "playwright test 2>&1 | tee last-run.log",
-    "screenshot:web": "playwright test --project=web-adminconsole --project=web-passwordmanager 2>&1 | tee last-run.log",
+    "screenshot:web": "playwright test --project=web-adminconsole --project=web-passwordmanager --project=web-secretsmanager 2>&1 | tee last-run.log",
     "screenshot:web:adminconsole": "playwright test --project=web-adminconsole 2>&1 | tee last-run.log",
-    "screenshot:web:passwordmanager": "playwright test --project=web-passwordmanager 2>&1 | tee last-run.log"
+    "screenshot:web:passwordmanager": "playwright test --project=web-passwordmanager 2>&1 | tee last-run.log",
+    "screenshot:web:secretsmanager": "playwright test --project=web-secretsmanager 2>&1 | tee last-run.log"
   },
   "devDependencies": {
     "@playwright/test": "^1.43.0"

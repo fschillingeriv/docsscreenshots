@@ -2,7 +2,8 @@
  * vault.spec.js
  *
  * Captures screenshots of the Password Manager vault page and all seven
- * "New" item dialogs, plus item and bulk action menus:
+ * "New" item dialogs, plus item and bulk action menus, and view/edit dialogs
+ * for each item type:
  *   - vault.png                     — base vault page
  *   - vault-new-login.png           — New > Login dialog
  *   - vault-new-card.png            — New > Card dialog
@@ -13,11 +14,17 @@
  *   - vault-new-collection.png      — New > Collection dialog
  *   - vault-item-options-login.png  — Login item ellipsis menu
  *   - vault-bulk-options.png        — Bulk actions ellipsis menu (2 items selected)
+ *   - vault-view-login.png          — View/edit dialog for a Login item
+ *   - vault-view-card.png           — View/edit dialog for a Card item
+ *   - vault-view-identity.png       — View/edit dialog for an Identity item
+ *   - vault-view-note.png           — View/edit dialog for a Note item
+ *   - vault-view-ssh-key.png        — View/edit dialog for an SSH key item
  *
  * Requires:
  *   - BW_EMAIL and BW_PASSWORD set in .env
  *   - WEB_APP_URL set in .env (or falls back to https://vault.bitwarden.com)
  *   - Email verification disabled on the account
+ *   - At least one item of each type (Login, Card, Identity, Note, SSH key) in the vault
  */
 
 import { test } from '@playwright/test';
@@ -64,17 +71,21 @@ async function openNewMenu(page, itemLabel) {
   await page.click(`[role="menuitem"]:has-text("${itemLabel}")`);
 }
 
-// Wait for a cipher form dialog to be fully ready
+// Wait for a new-item cipher form dialog to be fully ready
 async function waitForCipherDialog(page) {
   await page.waitForSelector('vault-cipher-form', { state: 'visible', timeout: 15000 });
-  // Wait for the dialog backdrop to fully render
+  await page.waitForTimeout(500);
+}
+
+// Wait for a view dialog by its heading text (e.g. "View Login", "View Card")
+async function waitForViewDialog(page, typeLabel) {
+  await page.waitForSelector(`h2:has-text("View ${typeLabel}")`, { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(500);
 }
 
 // Wait for a named dialog (folder/collection) by its title text
 async function waitForNamedDialog(page, title) {
   await page.waitForSelector(`span[bitdialogtitle]:has-text("${title}")`, { state: 'visible', timeout: 15000 });
-  // Wait for the dialog backdrop to fully render
   await page.waitForTimeout(500);
 }
 
@@ -83,6 +94,20 @@ async function closeDialog(page) {
   await page.keyboard.press('Escape');
   await page.waitForSelector('bit-dialog', { state: 'detached', timeout: 5000 }).catch(() => {});
   await page.waitForTimeout(300);
+}
+
+// Filter the vault by item type using the left sidebar, then click the first
+// item in the filtered list to open its view dialog
+async function openFirstItemOfType(page, typeLabel) {
+  await page.locator(`button[aria-label="Filter: ${typeLabel}"]`).click();
+  await page.waitForSelector('table tbody tr', { state: 'visible', timeout: 15000 });
+  await page.waitForTimeout(300);
+
+  // Click the item name button in the first row to open the view dialog
+  const firstItemButton = page.locator('table tbody tr').first().locator('button').first();
+  await firstItemButton.waitFor({ state: 'visible', timeout: 10000 });
+  await firstItemButton.click();
+  await waitForViewDialog(page, typeLabel);
 }
 
 test('vault - base page and new item dialogs', async ({ page }) => {
@@ -166,4 +191,27 @@ test('vault - base page and new item dialogs', async ({ page }) => {
   });
   console.log('Screenshot saved: vault-bulk-options.png');
   await page.keyboard.press('Escape');
+
+  // View dialogs — filter by type in the sidebar then click the first item
+  await goToVault(page);
+
+  await openFirstItemOfType(page, 'Login');
+  await takeScreenshot(page, 'vault-view-login.png');
+  await closeDialog(page);
+
+  await openFirstItemOfType(page, 'Card');
+  await takeScreenshot(page, 'vault-view-card.png');
+  await closeDialog(page);
+
+  await openFirstItemOfType(page, 'Identity');
+  await takeScreenshot(page, 'vault-view-identity.png');
+  await closeDialog(page);
+
+  await openFirstItemOfType(page, 'Note');
+  await takeScreenshot(page, 'vault-view-note.png');
+  await closeDialog(page);
+
+  await openFirstItemOfType(page, 'SSH key');
+  await takeScreenshot(page, 'vault-view-ssh-key.png');
+  await closeDialog(page);
 });

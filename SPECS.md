@@ -16,6 +16,11 @@ All screenshots output to `output/` and are gitignored.
 | | `vault-new-collection.png` | New Collection dialog. |
 | | `vault-item-options-login.png` | Login item options menu. |
 | | `vault-bulk-options.png` | Bulk actions menu (2 items selected). |
+| | `vault-view-login.png` | View/edit dialog for a Login item. |
+| | `vault-view-card.png` | View/edit dialog for a Card item. |
+| | `vault-view-identity.png` | View/edit dialog for an Identity item. |
+| | `vault-view-note.png` | View/edit dialog for a Note item. |
+| | `vault-view-ssh-key.png` | View/edit dialog for an SSH key item. |
 | `screenshots/web/passwordmanager/send.spec.js` | `send.png` | Base Send page. |
 | | `send-new-text.png` | New Text Send dialog. |
 | | `send-new-file.png` | New File Send dialog. |
