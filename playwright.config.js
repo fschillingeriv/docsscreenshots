@@ -42,6 +42,15 @@ export default defineConfig({
         viewport: { width: 1280, height: 1100 },
       },
     },
+    {
+      name: 'web-secretsmanager',
+      testDir: './screenshots/web/secretsmanager',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.WEB_APP_URL || 'https://vault.bitwarden.com',
+        viewport: { width: 1280, height: 1100 },
+      },
+    },
 
     // Future clients — uncomment and configure as needed:
     // {
