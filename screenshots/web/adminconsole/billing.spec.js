@@ -53,6 +53,7 @@ test('billing pages', async ({ page }) => {
 
   // Billing history
   await page.goto(`${baseURL}/#/organizations/${orgId}/billing/history`);
+  await page.waitForSelector('.bwi-spinner', { state: 'detached', timeout: 15000 });
   await page.waitForSelector('app-billing-history', { state: 'visible', timeout: 15000 });
   await takeScreenshot(page, 'billing-history.png');
 });

@@ -146,7 +146,7 @@ test('vault - base page and new item dialogs', async ({ page }) => {
   await takeScreenshot(page, 'vault-item-options-login.png');
   await page.keyboard.press('Escape');
 
-  // Bulk actions ellipsis menu — select first two items then open header menu
+  // Bulk actions ellipsis menu — select first two rows then open header menu
   await goToVault(page);
   const rows = page.locator('table tbody tr');
   await rows.nth(0).locator('input[type="checkbox"]').check();
@@ -155,6 +155,15 @@ test('vault - base page and new item dialogs', async ({ page }) => {
   await page.locator('table thead button[aria-label="Options"]').click();
   await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 10000 });
   await page.waitForTimeout(300);
-  await takeScreenshot(page, 'vault-bulk-options.png');
+  await page.screenshot({
+    path: resolve(outputDir, 'vault-bulk-options.png'),
+    fullPage: true,
+    mask: [
+      page.locator('app-account-menu'),
+      page.locator('table thead input[type="checkbox"]'),
+    ],
+    maskColor: '#ffffff',
+  });
+  console.log('Screenshot saved: vault-bulk-options.png');
   await page.keyboard.press('Escape');
 });

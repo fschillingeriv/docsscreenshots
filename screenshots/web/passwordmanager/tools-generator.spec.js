@@ -49,10 +49,14 @@ test('tools generator - all views', async ({ page }) => {
   // Passphrase view
   await page.locator('label', { hasText: 'Passphrase' }).click();
   await page.waitForSelector('tools-passphrase-settings', { state: 'visible', timeout: 10000 });
+  // Wait for the toggle visual state to fully update
+  await page.waitForTimeout(500);
   await takeScreenshot(page, 'tools-generator-passphrase.png');
 
   // Username view
   await page.locator('label', { hasText: 'Username' }).click();
   await page.waitForSelector('bit-select[data-testid="username-type"]', { state: 'visible', timeout: 10000 });
+  // Wait for the toggle visual state to fully update
+  await page.waitForTimeout(500);
   await takeScreenshot(page, 'tools-generator-username.png');
 });
