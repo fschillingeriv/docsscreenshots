@@ -17,7 +17,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from './helpers/login.js';
+import { login, dismissOverlay } from './helpers/login.js';
 
 dotenv.config();
 
@@ -53,6 +53,7 @@ test.beforeEach(async ({ page }) => {
 
   await page.goto(`${baseURL}/#/organizations/${orgId}/access-intelligence`);
   await waitForPageLoad(page);
+  await dismissOverlay(page);
 });
 
 test('access intelligence - activity tab', async ({ page }) => {
@@ -61,12 +62,14 @@ test('access intelligence - activity tab', async ({ page }) => {
 });
 
 test('access intelligence - all applications tab', async ({ page }) => {
+  await dismissOverlay(page);
   await page.click('button[role="tab"]:has-text("All applications")');
   await page.waitForTimeout(500);
   await takeScreenshot(page, 'access-intelligence-all.png');
 });
 
 test('access intelligence - critical applications tab', async ({ page }) => {
+  await dismissOverlay(page);
   await page.click('button[role="tab"]:has-text("Critical applications")');
   await page.waitForTimeout(500);
   await takeScreenshot(page, 'access-intelligence-critical.png');

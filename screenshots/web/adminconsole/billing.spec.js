@@ -17,7 +17,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from './helpers/login.js';
+import { login, dismissOverlay } from './helpers/login.js';
 
 dotenv.config();
 
@@ -44,16 +44,19 @@ test('billing pages', async ({ page }) => {
   // Subscription
   await page.goto(`${baseURL}/#/organizations/${orgId}/billing/subscription`);
   await page.waitForSelector('app-subscription-status', { state: 'visible', timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'billing-subscription.png');
 
   // Payment details
   await page.goto(`${baseURL}/#/organizations/${orgId}/billing/payment-details`);
   await page.waitForSelector('app-display-payment-method', { state: 'visible', timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'billing-payment-details.png');
 
   // Billing history
   await page.goto(`${baseURL}/#/organizations/${orgId}/billing/history`);
   await page.waitForSelector('.bwi-spinner', { state: 'detached', timeout: 15000 });
   await page.waitForSelector('app-billing-history', { state: 'visible', timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'billing-history.png');
 });

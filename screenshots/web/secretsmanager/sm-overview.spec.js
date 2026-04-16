@@ -15,7 +15,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from '../adminconsole/helpers/login.js';
+import { login, dismissOverlay } from '../adminconsole/helpers/login.js';
 
 dotenv.config();
 
@@ -42,5 +42,6 @@ test('sm overview', async ({ page }) => {
   await page.goto(smBase);
   await page.waitForSelector('sm-overview, sm-dashboard, [class*="sm-overview"]', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(500);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-overview.png');
 });

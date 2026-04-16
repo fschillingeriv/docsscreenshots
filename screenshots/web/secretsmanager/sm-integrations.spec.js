@@ -15,7 +15,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from '../adminconsole/helpers/login.js';
+import { login, dismissOverlay } from '../adminconsole/helpers/login.js';
 
 dotenv.config();
 
@@ -42,5 +42,6 @@ test('sm integrations', async ({ page }) => {
   await page.goto(`${smBase}/integrations`);
   await page.waitForSelector('sm-integrations, bit-section, h1, h2', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(500);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-integrations.png');
 });

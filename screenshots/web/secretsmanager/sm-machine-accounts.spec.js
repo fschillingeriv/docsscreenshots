@@ -21,7 +21,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from '../adminconsole/helpers/login.js';
+import { login, dismissOverlay } from '../adminconsole/helpers/login.js';
 
 dotenv.config();
 
@@ -49,6 +49,7 @@ test('sm machine accounts list and detail tabs', async ({ page }) => {
   await page.goto(`${smBase}/machine-accounts`);
   await page.waitForSelector('tbody tr', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(500);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-machine-accounts.png');
 
   // Grab the href of the first machine account's link to extract the machine account ID
@@ -64,29 +65,34 @@ test('sm machine accounts list and detail tabs', async ({ page }) => {
   await page.goto(`${machineAccountBase}/projects`);
   await page.waitForSelector('nav[aria-label="Main"], navigation, tbody, bit-section', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(400);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-machine-account-projects.png');
 
   // People tab
   await page.goto(`${machineAccountBase}/people`);
   await page.waitForSelector('nav[aria-label="Main"], navigation, tbody, bit-section', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(400);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-machine-account-people.png');
 
   // Access tokens tab
   await page.goto(`${machineAccountBase}/access`);
   await page.waitForSelector('nav[aria-label="Main"], navigation, tbody, bit-section', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(400);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-machine-account-access-tokens.png');
 
   // Config tab — page renders environment variables, no table or bit-section
   await page.goto(`${machineAccountBase}/config`);
   await page.waitForSelector('h2', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(400);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-machine-account-config.png');
 
   // Event logs tab
   await page.goto(`${machineAccountBase}/events`);
   await page.waitForSelector('h1, h2, tbody, bit-section', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(600); // event logs may take a moment to load
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-machine-account-event-logs.png');
 });

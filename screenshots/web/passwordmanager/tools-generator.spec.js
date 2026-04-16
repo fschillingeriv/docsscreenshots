@@ -35,6 +35,15 @@ async function takeScreenshot(page, filename) {
   console.log(`Screenshot saved: ${filename}`);
 }
 
+// Dismiss any lingering CDK overlay (tooltip, dropdown, popover) by pressing Escape
+async function dismissOverlay(page) {
+  const backdrop = page.locator('.cdk-overlay-backdrop');
+  if (await backdrop.isVisible({ timeout: 500 }).catch(() => false)) {
+    await page.keyboard.press('Escape');
+    await backdrop.waitFor({ state: 'detached', timeout: 3000 }).catch(() => {});
+  }
+}
+
 test('tools generator - all views', async ({ page }) => {
   await login(page);
   await page.goto(`${baseURL}/#/tools/generator`);
@@ -47,16 +56,16 @@ test('tools generator - all views', async ({ page }) => {
   await takeScreenshot(page, 'tools-generator-password.png');
 
   // Passphrase view
+  await dismissOverlay(page);
   await page.locator('label', { hasText: 'Passphrase' }).click();
   await page.waitForSelector('tools-passphrase-settings', { state: 'visible', timeout: 10000 });
-  // Wait for the toggle visual state to fully update
   await page.waitForTimeout(500);
   await takeScreenshot(page, 'tools-generator-passphrase.png');
 
   // Username view
+  await dismissOverlay(page);
   await page.locator('label', { hasText: 'Username' }).click();
   await page.waitForSelector('bit-select[data-testid="username-type"]', { state: 'visible', timeout: 10000 });
-  // Wait for the toggle visual state to fully update
   await page.waitForTimeout(500);
   await takeScreenshot(page, 'tools-generator-username.png');
 });

@@ -22,7 +22,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from './helpers/login.js';
+import { login, dismissOverlay } from './helpers/login.js';
 
 dotenv.config();
 
@@ -54,42 +54,50 @@ test('reporting pages', async ({ page }) => {
   // Reports home
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports`);
   await page.waitForSelector('app-report-list', { state: 'visible', timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-reports-home.png');
 
   // Exposed passwords
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/exposed-passwords-report`);
   await waitForReport(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-exposed-passwords.png');
 
   // Inactive two-factor
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/inactive-two-factor-report`);
   await waitForReport(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-inactive-two-factor.png');
 
   // Reused passwords
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/reused-passwords-report`);
   await waitForReport(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-reused-passwords.png');
 
   // Unsecured websites
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/unsecured-websites-report`);
   await waitForReport(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-unsecured-websites.png');
 
   // Weak passwords
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/weak-passwords-report`);
   await waitForReport(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-weak-passwords.png');
 
   // Member access
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/reports/member-access-report`);
   await page.waitForSelector('bit-icon[name="bwi-spinner"]', { state: 'detached', timeout: 15000 });
   await page.waitForSelector('bit-table-scroll', { state: 'visible', timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-member-access.png');
 
   // Event logs
   await page.goto(`${baseURL}/#/organizations/${orgId}/reporting/events`);
   await page.waitForSelector('input[type="datetime-local"]', { state: 'visible', timeout: 15000 });
   await page.waitForSelector('[data-testid="events-table"], p', { state: 'visible', timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'reporting-events.png');
 });

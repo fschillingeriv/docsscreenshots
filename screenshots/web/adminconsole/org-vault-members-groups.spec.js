@@ -17,7 +17,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from './helpers/login.js';
+import { login, dismissOverlay } from './helpers/login.js';
 
 dotenv.config();
 
@@ -45,17 +45,20 @@ test('org vault, members, groups', async ({ page }) => {
   await page.goto(`${baseURL}/#/organizations/${orgId}/vault`);
   await page.waitForSelector('app-org-vault-header', { state: 'visible', timeout: 15000 });
   await page.waitForSelector('app-vault-items', { state: 'visible', timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'org-vault.png');
 
   // Members
   await page.goto(`${baseURL}/#/organizations/${orgId}/members`);
   await page.waitForSelector('bit-toggle-group', { state: 'visible', timeout: 15000 });
   await page.waitForFunction(() => !document.querySelector('main i.bwi-spinner'), { timeout: 15000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'members.png');
 
   // Groups
   await page.goto(`${baseURL}/#/organizations/${orgId}/groups`);
   await page.waitForSelector('.bwi-spinner', { state: 'detached', timeout: 15000 });
   await page.waitForSelector('bit-table, p', { state: 'visible', timeout: 10000 });
+  await dismissOverlay(page);
   await takeScreenshot(page, 'groups.png');
 });

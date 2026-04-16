@@ -19,7 +19,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from '../adminconsole/helpers/login.js';
+import { login, dismissOverlay } from '../adminconsole/helpers/login.js';
 
 dotenv.config();
 
@@ -50,6 +50,7 @@ async function clickTab(page, label) {
 
 // Open the secret dialog by clicking the name button in the first row
 async function openFirstSecret(page) {
+  await dismissOverlay(page);
   // Secrets use a button (not a link) in the name cell to open the dialog
   const firstSecretButton = page.locator('tbody tr').first().locator('button').first();
   await firstSecretButton.waitFor({ state: 'visible', timeout: 10000 });
@@ -72,6 +73,7 @@ test('sm secrets list and dialog tabs', async ({ page }) => {
   await page.goto(`${smBase}/secrets`);
   await page.waitForSelector('tbody tr', { state: 'visible', timeout: 15000 });
   await page.waitForTimeout(500);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'sm-secrets.png');
 
   // Open first secret dialog — lands on Name/Value pair tab by default

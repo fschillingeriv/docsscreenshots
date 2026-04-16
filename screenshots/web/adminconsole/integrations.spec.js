@@ -18,7 +18,7 @@ import { test } from '@playwright/test';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import dotenv from 'dotenv';
-import { login } from './helpers/login.js';
+import { login, dismissOverlay } from './helpers/login.js';
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -63,23 +63,27 @@ test.beforeEach(async ({ page }) => {
 test('integrations - single sign-on tab', async ({ page }) => {
   await page.goto(`${baseURL}/#/organizations/${orgId}/integrations/single-sign-on`);
   await waitForTabContent(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'integrations-sso.png');
 });
 
 test('integrations - user provisioning tab', async ({ page }) => {
   await page.goto(`${baseURL}/#/organizations/${orgId}/integrations/user-provisioning`);
   await waitForTabContent(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'integrations-user-provisioning.png');
 });
 
 test('integrations - event management tab', async ({ page }) => {
   await page.goto(`${baseURL}/#/organizations/${orgId}/integrations/event-management`);
   await waitForTabContent(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'integrations-event-management.png');
 });
 
 test('integrations - device management tab', async ({ page }) => {
   await page.goto(`${baseURL}/#/organizations/${orgId}/integrations/device-management`);
   await waitForTabContent(page);
+  await dismissOverlay(page);
   await takeScreenshot(page, 'integrations-device-management.png');
 });

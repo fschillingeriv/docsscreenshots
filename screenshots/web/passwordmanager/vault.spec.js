@@ -51,9 +51,17 @@ async function takeScreenshot(page, filename) {
   console.log(`Screenshot saved: ${filename}`);
 }
 
-// Navigate to the vault and wait for items to load
+// Navigate to the vault and wait for items to load.
+// Uses the sidebar nav link rather than page.goto() to avoid triggering a
+// full reload which causes a lock screen on some environments.
 async function goToVault(page) {
-  await page.goto(baseURL);
+  const vaultLink = page.locator('nav a[href="#/vault"], nav a[href="#/"]').first();
+  if (await vaultLink.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await vaultLink.click();
+  } else {
+    // Fallback: navigate directly if the nav link isn't available
+    await page.goto(`${baseURL}/#/vault`);
+  }
   await page.waitForSelector('app-vault-items', { state: 'visible', timeout: 15000 });
   // Dismiss the onboarding checklist if it's visible
   const dismissButton = page.locator('button:has-text("Dismiss")');
@@ -111,9 +119,16 @@ async function openFirstItemOfType(page, typeLabel) {
 }
 
 test('vault - base page and new item dialogs', async ({ page }) => {
-  // Log in once and navigate to the vault
+  // Log in once — login() already lands us on the vault
   await login(page);
-  await goToVault(page);
+  await page.waitForSelector('app-vault-items', { state: 'visible', timeout: 15000 });
+  // Dismiss the onboarding checklist if it's visible
+  const dismissButton = page.locator('button:has-text("Dismiss")');
+  if (await dismissButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await dismissButton.click();
+    await page.waitForSelector('app-vault-onboarding', { state: 'detached', timeout: 5000 }).catch(() => {});
+  }
+  await page.waitForTimeout(500);
 
   // Base vault page
   await takeScreenshot(page, 'vault.png');
@@ -160,7 +175,7 @@ test('vault - base page and new item dialogs', async ({ page }) => {
   await takeScreenshot(page, 'vault-new-collection.png');
   await closeDialog(page);
 
-  // Login item ellipsis menu — navigate fresh to ensure clean table state
+  // Login item ellipsis menu — use goToVault to return via nav link
   await goToVault(page);
   const firstItemRow = page.locator('table tbody tr').first();
   await firstItemRow.waitFor({ state: 'visible', timeout: 10000 });
