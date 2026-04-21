@@ -58,10 +58,23 @@ export default defineConfig({
     //   testDir: './screenshots/extension',
     //   use: { ... },
     // },
-    // {
-    //   name: 'desktop',
-    //   testDir: './screenshots/desktop',
-    //   use: { ... },
-    // },
+
+    {
+      name: 'desktop',
+      testDir: './screenshots/desktop',
+      use: {
+        // Electron apps are driven via _electron.launch() in each spec,
+        // not via a browser — no browser context is created here.
+        viewport: { width: 1280, height: 900 },
+      },
+      dependencies: ['desktop-setup'],
+    },
+
+    {
+      name: 'desktop-setup',
+      testDir: './screenshots/desktop',
+      testMatch: 'setup.js',
+      use: {},
+    },
   ],
 });

@@ -9,3 +9,6 @@ node_modules/
 
 # Test output log
 last-run.log
+
+# Desktop app isolated data directory (wiped before each run)
+.desktop-app-data/
