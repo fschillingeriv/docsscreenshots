@@ -62,11 +62,12 @@ test('desktop send', async () => {
       const deleteBtn = page.locator('.cdk-overlay-container button:has-text("Delete")').first();
       if (await deleteBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
         await deleteBtn.click({ force: true });
-        await page.waitForSelector('bit-simple-dialog, bit-dialog', {
+        // Wait for the confirmation dialog overlay to appear
+        await page.waitForSelector('.cdk-overlay-backdrop-showing', {
           state: 'visible',
           timeout: 5000,
         });
-        await page.waitForTimeout(300);
+        await page.waitForTimeout(500);
         await takeScreenshot(page, 'desktop-send-delete.png');
         await page.keyboard.press('Escape');
         await page.waitForTimeout(300);

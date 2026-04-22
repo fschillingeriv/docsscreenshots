@@ -76,6 +76,75 @@ function resolveNpmBin() {
 }
 
 /**
+ * Launches the Bitwarden desktop app to the login screen without logging in.
+ * Returns the app, page, and configured serverUrl so the caller can take
+ * pre-login screenshots before proceeding.
+ *
+ * @returns {{ electronApp, page, serverUrl }}
+ */
+export async function launchToLoginScreen() {
+  checkEnv();
+
+  if (existsSync(APP_DATA_DIR)) {
+    rmSync(APP_DATA_DIR, { recursive: true, force: true });
+  }
+  mkdirSync(APP_DATA_DIR, { recursive: true });
+
+  const seedData = {
+    'global_desktopSettings_preventScreenshots': false,
+    'global_theming_selection': 'light',
+  };
+  const { writeFileSync } = await import('fs');
+  writeFileSync(resolve(APP_DATA_DIR, 'data.json'), JSON.stringify(seedData));
+
+  console.log(`[desktop] Using fresh app data dir: ${APP_DATA_DIR}`);
+
+  const electronPath = resolveElectronPath();
+  const npmBin = resolveNpmBin();
+  const nodeBin = existsSync(npmBin) ? resolve(dirname(npmBin), 'node') : process.execPath;
+
+  console.log(`[desktop] Launching via npm start (${electronPath})`);
+
+  const electronApp = await electron.launch({
+    executablePath: electronPath,
+    args: [resolve(DESKTOP_DIR, 'build')],
+    cwd: DESKTOP_DIR,
+    env: {
+      ...process.env,
+      PATH: `${dirname(nodeBin)}:${process.env.PATH}`,
+      ELECTRON_IS_DEV: '0',
+      ELECTRON_NO_UPDATER: '1',
+      BITWARDEN_APPDATA_DIR: APP_DATA_DIR,
+    },
+  });
+
+  const page = await electronApp.firstWindow();
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForSelector('app-root', { state: 'attached', timeout: 30000 });
+
+  // Close DevTools immediately — dev builds open it automatically but it
+  // shrinks the app window and would appear in pre-login screenshots.
+  // Poll until it stays closed, since loadURL().then() may reopen it.
+  for (let i = 0; i < 20; i++) {
+    const isOpen = await electronApp.evaluate(({ BrowserWindow }) => {
+      const win = BrowserWindow.getAllWindows()[0];
+      if (win && win.webContents.isDevToolsOpened()) {
+        win.webContents.closeDevTools();
+        return true;
+      }
+      return false;
+    });
+    if (!isOpen) break;
+    await page.waitForTimeout(200);
+  }
+  await page.waitForTimeout(300);
+
+  await page.waitForSelector('auth-anon-layout', { state: 'visible', timeout: 30000 });
+
+  return { electronApp, page, serverUrl };
+}
+
+/**
  * Launches the Bitwarden desktop app against a clean, isolated data directory
  * and performs a full login, ensuring fresh tokens and a clean sync.
  *
@@ -90,10 +159,13 @@ export async function launchAndLogin() {
   }
   mkdirSync(APP_DATA_DIR, { recursive: true });
 
-  // Pre-seed the storage with preventScreenshots=false so the window never
-  // gets content protection enabled during the run.
-  // electron-store saves to a file named "data.json" in the app data dir.
-  const seedData = { 'global_desktopSettings_preventScreenshots': false };
+  // Pre-seed the storage so the app starts with the right settings:
+  // - preventScreenshots=false: allows Playwright to capture the window
+  // - theming_selection='light': forces light mode regardless of system theme
+  const seedData = {
+    'global_desktopSettings_preventScreenshots': false,
+    'global_theming_selection': 'light',
+  };
   const { writeFileSync } = await import('fs');
   writeFileSync(resolve(APP_DATA_DIR, 'data.json'), JSON.stringify(seedData));
 

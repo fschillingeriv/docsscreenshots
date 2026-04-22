@@ -134,8 +134,9 @@ async function filterByType(page, typeName) {
 }
 
 async function clickFirstVaultItem(page) {
-  // Each cipher row has a button[bitLink] that opens the view drawer
-  const firstCipherName = page.locator('tr[appvaultcipherrow] button[bitlink], tr[appVaultCipherRow] button[bitLink]').first();
+  // The cipher name button has aria-haspopup="true" — a reliable DOM attribute.
+  // (bitLink is a directive and doesn't appear as an HTML attribute.)
+  const firstCipherName = page.locator('tr[appvaultcipherrow] button[aria-haspopup="true"]').first();
   await firstCipherName.waitFor({ state: 'visible', timeout: 10000 });
   await firstCipherName.click({ force: true });
   await page.waitForSelector(

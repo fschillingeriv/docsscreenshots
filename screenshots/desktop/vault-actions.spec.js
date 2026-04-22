@@ -61,6 +61,39 @@ test('desktop vault actions', async () => {
   try {
     await waitForVault(page);
 
+    // Expand the side nav if it's collapsed — the dev build starts with it closed.
+    const sideNavToggle = page.locator('button[aria-label="Toggle side navigation"]').first();
+    if (await sideNavToggle.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const expanded = await sideNavToggle.getAttribute('aria-expanded');
+      if (expanded === 'false') {
+        await sideNavToggle.click();
+        await page.waitForTimeout(500);
+      }
+    }
+
+    // Expand the top-level Vault nav group if collapsed — it contains the
+    // filter items (Favorites, Login, Folders, etc.) in its children.
+    // The collapse arrow sits inside the first bit-nav-group in the sidebar.
+    // Try multiple selector strategies since the component tag may not survive.
+    const vaultGroupToggle = page.locator([
+      'button[data-testid="nav-group-collapse-arrow"]',
+      'app-vault-filter button[data-testid="nav-group-collapse-arrow"]',
+    ].join(', ')).first();
+    if (await vaultGroupToggle.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const vaultExpanded = await vaultGroupToggle.getAttribute('aria-expanded');
+      if (vaultExpanded === 'false') {
+        await vaultGroupToggle.click({ force: true });
+        await page.waitForTimeout(500);
+      }
+    } else {
+      // Fallback: click the Vault text link itself which may toggle the group
+      const vaultNavItem = page.locator('bit-nav-item:has-text("Vault"), [class*="nav"] a:has-text("Vault")').first();
+      if (await vaultNavItem.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await vaultNavItem.click({ force: true });
+        await page.waitForTimeout(500);
+      }
+    }
+
     // ── Filtering on desktop ──────────────────────────────────────────────
     const loginFilter = page.locator('bit-nav-item:has-text("Login")').first();
     await loginFilter.waitFor({ state: 'visible', timeout: 5000 });
@@ -96,11 +129,19 @@ test('desktop vault actions', async () => {
     await page.waitForTimeout(300);
 
     // ── Edit a folder on desktop ──────────────────────────────────────────
-    // The Folders nav group is the last bit-nav-group in app-vault-filter.
-    // Use data-testid on the collapse arrow rather than aria-label, which may
-    // vary. Folders is always the last group in the vault filter sidebar.
-    const allCollapseArrows = page.locator('app-vault-filter button[data-testid="nav-group-collapse-arrow"]');
-    const foldersToggle = allCollapseArrows.last();
+    // The options menu interaction can collapse the vault nav group.
+    // Re-expand it if needed before looking for the Folders group.
+    const vaultGroupToggleForFolders = page.locator('button[data-testid="nav-group-collapse-arrow"]').first();
+    if (await vaultGroupToggleForFolders.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const expanded = await vaultGroupToggleForFolders.getAttribute('aria-expanded');
+      if (expanded === 'false') {
+        await vaultGroupToggleForFolders.click({ force: true });
+        await page.waitForTimeout(500);
+      }
+    }
+    // app-vault-filter. Scope the collapse arrow to that specific group.
+    const foldersGroup = page.locator('app-vault-filter bit-nav-group').filter({ hasText: 'Folders' }).last();
+    const foldersToggle = foldersGroup.locator('button[data-testid="nav-group-collapse-arrow"]').first();
     if (await foldersToggle.isVisible({ timeout: 3000 }).catch(() => false)) {
       const expanded = await foldersToggle.getAttribute('aria-expanded');
       if (expanded === 'false') {
@@ -108,7 +149,7 @@ test('desktop vault actions', async () => {
         await page.waitForTimeout(300);
       }
       // Folder items are now in the DOM — hover the first to reveal the edit button
-      const firstFolder = page.locator('app-folder-filter').first();
+      const firstFolder = foldersGroup.locator('app-folder-filter').first();
       if (await firstFolder.isVisible({ timeout: 2000 }).catch(() => false)) {
         await firstFolder.hover();
         await page.waitForTimeout(300);
@@ -134,9 +175,12 @@ test('desktop vault actions', async () => {
     }
 
     // ── Share from desktop (Assign to collections) ────────────────────────
-    // Scope "All items" to app-type-filter to avoid matching stale elements
+    // After folder interactions the nav sidebar can be in a stale state.
+    // Reset by clicking the vault logo link which always navigates to the vault
+    // root and clears any active filter, regardless of sidebar state.
     await page.waitForSelector('.cdk-overlay-backdrop-showing', { state: 'detached', timeout: 5000 }).catch(() => {});
-    await page.locator('app-type-filter bit-nav-group').first().click({ force: true });
+    await page.waitForSelector('app-vault-v3', { state: 'visible', timeout: 10000 });
+    await page.locator('bit-nav-logo a').first().click({ force: true });
     await page.waitForTimeout(500);
 
     const shareRow = page.locator('tr[appvaultcipherrow]').first();
